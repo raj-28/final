@@ -7,9 +7,7 @@ phases:
 
   pre_build:
     commands:
-      # Install the AWS CLI
-      apt-get update && apt-get install -y awscli
-      
+      # Install the AWS CLI      
       # Authenticate Docker to the Amazon ECR registry
       aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 767398118103.dkr.ecr.ca-central-1.amazonaws.com      
   build:
