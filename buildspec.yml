@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+
+  pre_build:
+    commands:
+      # Install the AWS CLI
+      apt-get update && apt-get install -y awscli
+      
+      # Authenticate Docker to the Amazon ECR registry
+      aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 767398118103.dkr.ecr.ca-central-1.amazonaws.com      
+  build:
+    commands:
+      # Build the Docker image
+      docker build -t finaltest .
+  post_build:
+    commands:
+      # Push the Docker image to Amazon ECR
+      docker push 767398118103.dkr.ecr.ca-central-1.amazonaws.com/finaltest:latest      
+      # Tag the image with 'latest'
+      docker tag finaltest:latest 767398118103.dkr.ecr.ca-central-1.amazonaws.com/finaltest:latest
+artifacts:
+  files: imagedefinitions.json
